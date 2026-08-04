@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak angka</title>
+</head>
+<body>
+    <h1>tebak angka</h1>
+    <p>Petunjuk :</p>
+    <p id="hint"></p>
+    <input type="number" id="input-user">
+    <button id="input-btn">Tebak</button>
+    <button id="main-lagi">Main lagi</button>
+    <script>
+        
+        // DOM ---------------------------------------------
+
+        const hint = document.getElementById("hint")
+        const inputUser = document.getElementById("input-user")
+        const inputBtn = document.getElementById("input-btn")
+        const mainLagi = document.getElementById("main-lagi")
+
+        // VAR ---------------------------------------------
+
+        let angkaRahasia = 0
+        let angkaUser = null
+        let percobaan = 0
+        mainLagi.disabled = true
+
+        // FUNCTION
+
+        function angkaGenerate(max) {
+            angkaRahasia = Math.floor(Math.random() * max) + 1
+            return
+        }
+        angkaGenerate(99)
+
+        // EVENT LISTENER
+
+        inputBtn.addEventListener('click', () => {
+            angkaUser = Number(inputUser.value)
+            percobaan++
+            if (angkaUser === angkaRahasia) {
+                hint.textContent = `Selamat,angka benar! anda telah mencoba ${percobaan} kali!`
+                inputBtn.disabled = true
+                mainLagi.disabled = false
+            } else if  (angkaUser < angkaRahasia) {
+                hint.textContent = "terlalu kecil!"
+            } else if (angkaUser > angkaRahasia) {
+                hint.textContent = "terlalu besar!"
+            }
+            inputUser.value = ""
+        })
+        mainLagi.addEventListener("Click", () => {
+            angkaGenerate(99)
+            percobaan = 0
+            hint.textContent = ""
+        })
+    </script>
+</body>
+</html>
