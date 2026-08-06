@@ -7,11 +7,18 @@
 </head>
 <body>
     <h1>tebak angka</h1>
+    <p>Angka :</p>
+    <p id="angka-petunjuk"></p>
     <p>Petunjuk :</p>
     <p id="hint"></p>
     <input type="number" id="input-user">
     <button id="input-btn">Tebak</button>
     <button id="main-lagi">Main lagi</button>
+    <p id="percobaan-tebakan">percobaan : 0</p>
+    <p>Riwayat tebakan :</p>
+    <ul id="riwayat">
+
+    </ul>
     <script>
         
         // DOM ---------------------------------------------
@@ -20,6 +27,9 @@
         const inputUser = document.getElementById("input-user")
         const inputBtn = document.getElementById("input-btn")
         const mainLagi = document.getElementById("main-lagi")
+        const angkaPetunjuk = document.getElementById("angka-petunjuk")
+        const riwayat = document.getElementById("riwayat")
+        const percobaanTebakan = document.getElementById("percobaan-tebakan")
 
         // VAR ---------------------------------------------
 
@@ -29,20 +39,35 @@
         mainLagi.disabled = true
 
         // FUNCTION
-
+        function tambahRiwayat(angkaUser) {
+            const li = document.createElement("li")
+            li.textContent = angkaUser
+            riwayat.appendChild(li)
+        }
         function angkaGenerate(max) {
             angkaRahasia = Math.floor(Math.random() * max) + 1
             return
         }
         angkaGenerate(99)
+        if (angkaRahasia <= 99 && angkaRahasia >= 10) {
+            angkaPetunjuk.textContent = "angka rahasia antara 10 - 99"
+        } else if (angkaRahasia <= 9 && angkaRahasia >= 1 ) {
+            angkaPetunjuk.textContent = "angka rahasia antara 1 - 9"
+
+        } else if (angkaRahasia <= 999  && angkaRahasia >= 100) {
+            angkaPetunjuk.textContent = "angka rahasia antara 100 - 999"
+        }
 
         // EVENT LISTENER
 
         inputBtn.addEventListener('click', () => {
             angkaUser = Number(inputUser.value)
+            tambahRiwayat(angkaUser)
             percobaan++
+            percobaanTebakan.textContent = `percobaan : ${percobaan}`
             if (angkaUser === angkaRahasia) {
                 hint.textContent = `Selamat,angka benar! anda telah mencoba ${percobaan} kali!`
+                angkaPetunjuk.textContent = angkaRahasia
                 inputBtn.disabled = true
                 mainLagi.disabled = false
             } else if  (angkaUser < angkaRahasia) {
@@ -54,9 +79,19 @@
         })
         mainLagi.addEventListener("Click", () => {
             angkaGenerate(99)
+            angkaPetunjuk.textContent = ""
             percobaan = 0
             hint.textContent = ""
+            inputBtn.disabled = false
+            mainLagi.disabled = true
         })
     </script>
 </body>
 </html>
+
+<!--
+UPGRADE :
+ 1.RIWAYAT TEBAKAN 
+ 2.ANGKA PETUNJUK
+ 3.PERCOBAAN TEBAKAN
+-->
