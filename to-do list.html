@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do list</title>
+</head>
+<body>
+    <h1>To-do list</h1>
+    <input type="text" id="input-user">
+    <button id="btn-user" onclick="addList()">Create</button>
+    <ul id="list"></ul>
+    <script>
+        const inputUser = document.getElementById('input-user')
+        const btnUser = document.getElementById('btn-user')
+        const list = document.getElementById('list')
+        
+        function addList() {
+            if (!inputUser.value) {
+                alert('Masukkan Tugas!')
+                return
+            }
+            const li = document.createElement('li')
+            const deleteBtn = document.createElement('button')
+            li.textContent = inputUser.value
+            deleteBtn.textContent = "Delete"
+            inputUser.value = ''
+            deleteBtn.addEventListener('click', (e) => {
+                e.target.parentElement.remove()
+                e.target.remove()
+            })
+            li.appendChild(deleteBtn)
+            list.appendChild(li)
+        }
+    </script>
+</body>
+</html>
