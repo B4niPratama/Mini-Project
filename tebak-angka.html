@@ -1,92 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tebak angka</title>
-</head>
-<body>
-    <h1>tebak angka</h1>
-    <p>Angka :</p>
-    <p id="angka-petunjuk"></p>
-    <p>Petunjuk :</p>
-    <p id="hint"></p>
-    <input type="number" id="input-user">
-    <button id="input-btn">Tebak</button>
-    <button id="main-lagi">Main lagi</button>
-    <p id="percobaan-tebakan">percobaan : 0</p>
-    <p>Riwayat tebakan :</p>
-    <ul id="riwayat">
-
-    </ul>
+    <style>
+      body {
+        font-family: sans-serif;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        display: none;
+      }
+      .container-mode {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-mode">
+      <h1>Pilih mode:</h1>
+      <button class="mode-btn" mode="mudah">Mudah [1-50]</button>
+      <button class="mode-btn" mode="normal">Normal [1-100]</button>
+      <button class="mode-btn" mode="sulit">Sulit [1-1000]</button>
+    </div>
+    <div class="container">
+      <h1>tebak angka</h1>
+      <p>Angka :</p>
+      <p id="angka-petunjuk"></p>
+      <p>Petunjuk :</p>
+      <p id="hint"></p>
+      <input type="number" id="input-user" />
+      <button id="input-btn">Tebak</button>
+      <button id="main-lagi">Main lagi</button>
+      <p id="percobaan-tebakan">percobaan : 0</p>
+      <p>Riwayat tebakan :</p>
+      <ul id="riwayat"></ul>
+    </div>
     <script>
-        
-        // DOM ---------------------------------------------
+      // DOM ---------------------------------------------
 
-        const hint = document.getElementById("hint")
-        const inputUser = document.getElementById("input-user")
-        const inputBtn = document.getElementById("input-btn")
-        const mainLagi = document.getElementById("main-lagi")
-        const angkaPetunjuk = document.getElementById("angka-petunjuk")
-        const riwayat = document.getElementById("riwayat")
-        const percobaanTebakan = document.getElementById("percobaan-tebakan")
+      const hint = document.getElementById("hint");
+      const inputUser = document.getElementById("input-user");
+      const inputBtn = document.getElementById("input-btn");
+      const mainLagi = document.getElementById("main-lagi");
+      const angkaPetunjuk = document.getElementById("angka-petunjuk");
+      const riwayat = document.getElementById("riwayat");
+      const percobaanTebakan = document.getElementById("percobaan-tebakan");
+      const modeBtn = document.querySelectorAll(".mode-btn");
+      const containerMode = document.querySelector(".container-mode");
+      const container = document.querySelector(".container");
 
-        // VAR ---------------------------------------------
+      // VAR ---------------------------------------------
 
-        let angkaRahasia = 0
-        let angkaUser = null
-        let percobaan = 0
-        mainLagi.disabled = true
+      let angkaRahasia = 0;
+      let angkaUser = null;
+      let percobaan = 0;
+      mainLagi.disabled = true;
 
-        // FUNCTION
-        function tambahRiwayat(angkaUser) {
-            const li = document.createElement("li")
-            li.textContent = angkaUser
-            riwayat.appendChild(li)
+      // FUNCTION
+      function tambahRiwayat(angkaUser) {
+        const li = document.createElement("li");
+        li.textContent = angkaUser;
+        riwayat.appendChild(li);
+      }
+      function angkaGenerate(max) {
+        angkaRahasia = Math.floor(Math.random() * max) + 1;
+        return;
+      }
+
+      // EVENT LISTENER
+
+      inputBtn.addEventListener("click", () => {
+        angkaUser = Number(inputUser.value);
+        tambahRiwayat(angkaUser);
+        percobaan++;
+        percobaanTebakan.textContent = `percobaan : ${percobaan}`;
+        if (angkaUser === angkaRahasia) {
+          hint.textContent = `Selamat,angka benar! anda telah mencoba ${percobaan} kali!`;
+          angkaPetunjuk.textContent = angkaRahasia;
+          inputBtn.disabled = true;
+          mainLagi.disabled = false;
+        } else if (angkaUser < angkaRahasia) {
+          hint.textContent = "terlalu kecil!";
+        } else if (angkaUser > angkaRahasia) {
+          hint.textContent = "terlalu besar!";
         }
-        function angkaGenerate(max) {
-            angkaRahasia = Math.floor(Math.random() * max) + 1
-            return
-        }
-        angkaGenerate(99)
-        if (angkaRahasia <= 99 && angkaRahasia >= 10) {
-            angkaPetunjuk.textContent = "angka rahasia antara 10 - 99"
-        } else if (angkaRahasia <= 9 && angkaRahasia >= 1 ) {
-            angkaPetunjuk.textContent = "angka rahasia antara 1 - 9"
-
-        } else if (angkaRahasia <= 999  && angkaRahasia >= 100) {
-            angkaPetunjuk.textContent = "angka rahasia antara 100 - 999"
-        }
-
-        // EVENT LISTENER
-
-        inputBtn.addEventListener('click', () => {
-            angkaUser = Number(inputUser.value)
-            tambahRiwayat(angkaUser)
-            percobaan++
-            percobaanTebakan.textContent = `percobaan : ${percobaan}`
-            if (angkaUser === angkaRahasia) {
-                hint.textContent = `Selamat,angka benar! anda telah mencoba ${percobaan} kali!`
-                angkaPetunjuk.textContent = angkaRahasia
-                inputBtn.disabled = true
-                mainLagi.disabled = false
-            } else if  (angkaUser < angkaRahasia) {
-                hint.textContent = "terlalu kecil!"
-            } else if (angkaUser > angkaRahasia) {
-                hint.textContent = "terlalu besar!"
-            }
-            inputUser.value = ""
-        })
-        mainLagi.addEventListener("Click", () => {
-            angkaGenerate(99)
-            angkaPetunjuk.textContent = ""
-            percobaan = 0
-            hint.textContent = ""
-            inputBtn.disabled = false
-            mainLagi.disabled = true
-        })
+        inputUser.value = "";
+      });
+      mainLagi.addEventListener("click", () => {
+        riwayat.innerHTML = "";
+        angkaPetunjuk.textContent = "";
+        percobaan = 0;
+        hint.textContent = "";
+        inputBtn.disabled = false;
+        mainLagi.disabled = true;
+        container.style.display = "none";
+        containerMode.style.display = "block";
+      });
+      modeBtn.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const mode = btn.getAttribute("mode");
+          if (mode === "mudah") {
+            angkaGenerate(50);
+          } else if (mode === "normal") {
+            angkaGenerate(100);
+          } else if (mode === "sulit") {
+            angkaGenerate(1000);
+          }
+          if (angkaRahasia <= 99 && angkaRahasia >= 10) {
+            angkaPetunjuk.textContent = "angka rahasia antara 10 - 99";
+          } else if (angkaRahasia <= 9 && angkaRahasia >= 1) {
+            angkaPetunjuk.textContent = "angka rahasia antara 1 - 9";
+          } else if (angkaRahasia <= 999 && angkaRahasia >= 100) {
+            angkaPetunjuk.textContent = "angka rahasia antara 100 - 999";
+          }
+          containerMode.style.display = "none";
+          container.style.display = "block";
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
 
 <!--
@@ -94,4 +129,5 @@ UPGRADE :
  1.RIWAYAT TEBAKAN 
  2.ANGKA PETUNJUK
  3.PERCOBAAN TEBAKAN
+ 4. MODE PILIHAN (Mudah,Normal,Sulit)
 -->
