@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>counter</title>
+</head>
+<body>
+    <div class="container-mode">
+        <h1>Pilih mode: </h1>
+        <button class='mode' mode="easy">Easy</button>
+        <button class='mode' mode="medium">Medium</button>
+        <button class='mode' mode="hard">Hard</button>
+    </div>
+    <h1>Counter</h1>
+    <p id="counter">0</p>
+    <button id="add">+</button>
+    <button id="start">MULAI</button>
+    <p id="info"></p>
+
+    <script>
+        let counter = document.getElementById('counter')
+        let add = document.getElementById('add')
+        let start = document.getElementById('start')
+        let info = document.getElementById('info')
+        let modeButtons = document.querySelectorAll('.mode')
+        let number = 0
+        add.disabled = true
+
+        add.addEventListener('click', () => {
+            number++
+            counter.textContent = number
+        })
+        start.addEventListener('click', () => {
+            add.disabled = false
+            setTimeout(() => {
+                cekAngka(number)
+            }, 5000)
+        })
+        modeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    let mode = button.getAttribute('mode')
+                    switch (mode) {
+                        case 'easy':
+                            info.textContent = 'Mode Easy: Kamu harus menekan tombol + sebanyak 10 kali dalam 5 detik!'
+                            break;
+                        case 'medium':
+                            info.textContent = 'Mode Medium: Kamu harus menekan tombol + sebanyak 20 kali dalam 5 detik!'
+                            break;
+                        case 'hard':
+                            info.textContent = 'Mode Hard: Kamu harus menekan tombol + sebanyak 50 kali dalam 5 detik!'
+                            break;
+                    }
+                    cekMode(mode)
+                })
+        })
+        function cekAngka(num) {
+        }
+        function cekMode(mode) {
+            if (mode === 'easy') {
+                if (number >= 10) {
+                    info.textContent = 'Selamat, kamu menang!'
+                } else {
+                    info.textContent = 'Maaf, kamu kalah!'
+                }
+            } else if (mode === 'medium') {
+                if (number >= 20) {
+                    info.textContent = 'Selamat, kamu menang!'
+                } else {
+                    info.textContent = 'Maaf, kamu kalah!'
+                }
+            } else if (mode === 'hard') {
+                if (number >= 50) {
+                    info.textContent = 'Selamat, kamu menang!'
+                } else {
+                    info.textContent = 'Maaf, kamu kalah!'
+                }
+            }
+        }
+    </script>
+</body>
+</html>
