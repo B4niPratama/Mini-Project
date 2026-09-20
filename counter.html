@@ -1,179 +1,193 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>counter</title>
-        <style>
-            .container-mode {
-                display: block;
-            }
-            .container {
-                display: none;
-            }
-            #start {
-                display: none;
-            }
-            #playAgain {
-                display: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container-mode">
-            <h1>Pilih mode:</h1>
-            <button class="mode" mode="easy">Easy</button>
-            <button class="mode" mode="medium">Medium</button>
-            <button class="mode" mode="hard">Hard</button>
-        </div>
-        <div class="container">
-            <h1>Counter</h1>
-            <p id="counter">0</p>
-            <button id="add">+</button>
-            <button id="start">MULAI</button>
-            <button id="playAgain">MAIN LAGI</button>
-            <p id="info"></p>
-            <p id="timer">Waktu:</p>
-            <p>bestScore : </p>
-        </div>
-        <script>
-            let counter = document.getElementById("counter");
-            let add = document.getElementById("add");
-            let start = document.getElementById("start");
-            let info = document.getElementById("info");
-            let modeButtons = document.querySelectorAll(".mode");
-            let container = document.querySelector(".container");
-            let containerMode = document.querySelector(".container-mode");
-            let timer = document.getElementById("timer");
-            let playAgain = document.getElementById("playAgain");
-            let number = 0;
-            let modeChange = null;
-            let detik = null;
-            let waktu = 0;
-            let bestScore = {
-              easy: 0,
-              medium: 0,
-              hard: 0
-            }
-            add.disabled = true;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>counter</title>
+    <style>
+        .container-mode {
+            display: block;
+        }
+        .container {
+            display: none;
+        }
+        #start {
+            display: none;
+        }
+        #playAgain {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-mode">
+        <h1>Pilih mode: </h1>
+        <button class='mode' mode="easy">Easy</button>
+        <button class='mode' mode="medium">Medium</button>
+        <button class='mode' mode="hard">Hard</button>
+    </div>
+    <div class="container">
+        <h1>Counter</h1>
+        <p id="counter">
+            0
+        </p>
+        <button id="add">+</button>
+        <button id="start">MULAI</button>
+        <button id="playAgain">MAIN LAGI</button>
+        <p id="info"></p>
+        <p id="timer">
+            Waktu:
+        </p>
+        <p>
+            Best score :
+        </p>
+        <ul id="riwayatBestScore">
 
-            add.addEventListener("click", () => {
-                number++;
-                counter.textContent = number;
-            });
-            playAgain.addEventListener("click", () => {
-                start.disabled = false;
-                number = 0;
-                counter.textContent = number;
-                modeChange = null;
-                detik = null;
-                waktu = 0;
-                container.style.display = "none";
-                containerMode.style.display = "block";
-            });
-            start.addEventListener("click", () => {
-                add.disabled = false;
-                start.disabled = true;
-                cekDetik(modeChange);
-                let hitungMundur = setInterval(() => {
-                    waktu--;
-                    timer.textContent = `Waktu: ${waktu} detik`;
-                    if (waktu === 0) {
-                        timer.textContent = "Selesai!";
-                        clearInterval(hitungMundur);
-                    }
-                }, 1000);
-                setTimeout(() => {
-                    cekMode(modeChange);
-                    start.style.display = "none";
-                    playAgain.style.display = "block";
-                }, detik);
-            });
-            modeButtons.forEach(button => {
-                button.addEventListener("click", () => {
-                    let mode = button.getAttribute("mode");
+        </ul>
+    </div>
+    <script>
+        let counter = document.getElementById('counter')
+        let add = document.getElementById('add')
+        let start = document.getElementById('start')
+        let info = document.getElementById('info')
+        let modeButtons = document.querySelectorAll('.mode')
+        let container = document.querySelector(".container")
+        let containerMode = document.querySelector(".container-mode")
+        let timer = document.getElementById("timer")
+        let playAgain = document.getElementById("playAgain")
+        let riwayatBestScore = document.getElementById("riwayatBestScore")
+        let number = 0
+        let modeChange = null
+        let detik = null
+        let waktu = 0
+        let bestScore = {
+            easy: 0,
+            medium: 0,
+            hard: 0
+        }
+        add.disabled = true
+
+        add.addEventListener('click', () => {
+            number++
+            counter.textContent = number
+        })
+        playAgain.addEventListener("click", () => {
+            start.disabled = false
+            number = 0
+            counter.textContent = number
+            modeChange = null
+            detik = null
+            waktu = 0
+            container.style.display = "none"
+            containerMode.style.display = "block"
+        })
+        start.addEventListener('click', () => {
+            add.disabled = false
+            start.disabled = true
+            cekDetik(modeChange)
+            let hitungMundur = setInterval(() => {
+                waktu--
+                timer.textContent = `Waktu: ${waktu} detik`
+                if (waktu === 0) {
+                    timer.textContent = "Selesai!"
+                    clearInterval(hitungMundur)
+                }
+            },
+                1000)
+            setTimeout(() => {
+                cekMode(modeChange)
+                start.style.display = "none"
+                playAgain.style.display = "block"
+            },
+                detik)
+        })
+        modeButtons.forEach(button => {
+            button.addEventListener('click',
+                () => {
+                    let mode = button.getAttribute('mode')
                     switch (mode) {
-                        case "easy":
-                            info.textContent =
-                                "Mode Easy: Kamu harus menekan tombol + sebanyak 20 kali dalam 15 detik!";
-                            timer.textContent = `Waktu: 15 detik`;
-                            modeChange = "easy";
-                            waktu = 15;
-                            start.style.display = "block";
-                            playAgain.style.display = "none";
+                        case 'easy':
+                            info.textContent = 'Mode Easy: Kamu harus menekan tombol + sebanyak 20 kali dalam 15 detik!'
+                            timer.textContent = `Waktu: 15 detik`
+                            modeChange = "easy"
+                            waktu = 15
+                            start.style.display = "block"
+                            playAgain.style.display = "none"
                             break;
-                        case "medium":
-                            info.textContent =
-                                "Mode Medium: Kamu harus menekan tombol + sebanyak 30 kali dalam 10 detik!";
-                            timer.textContent = `Waktu: 10 detik`;
-                            modeChange = "medium";
-                            waktu = 10;
-                            start.style.display = "block";
-                            playAgain.style.display = "none";
+                        case 'medium':
+                            info.textContent = 'Mode Medium: Kamu harus menekan tombol + sebanyak 30 kali dalam 10 detik!'
+                            timer.textContent = `Waktu: 10 detik`
+                            modeChange = "medium"
+                            waktu = 10
+                            start.style.display = "block"
+                            playAgain.style.display = "none"
                             break;
-                        case "hard":
-                            info.textContent =
-                                "Mode Hard: Kamu harus menekan tombol + sebanyak 50 kali dalam 10 detik!";
-                            timer.textContent = `Waktu: 10 detik`;
-                            modeChange = "hard";
-                            waktu = 10;
-                            start.style.display = "block";
-                            playAgain.style.display = "none";
+                        case 'hard':
+                            info.textContent = 'Mode Hard: Kamu harus menekan tombol + sebanyak 50 kali dalam 10 detik!'
+                            timer.textContent = `Waktu: 10 detik`
+                            modeChange = "hard"
+                            waktu = 10
+                            start.style.display = "block"
+                            playAgain.style.display = "none"
                             break;
                     }
-                    container.style.display = "block";
-                    containerMode.style.display = "none";
-                });
-            });
-            function cekMode(mode) {
-                if (mode === "easy") {
-                    if (number >= 20) {
-                        info.textContent = "Selamat, kamu menang!";
-                        add.disabled = true;
-                    } else {
-                        add.disabled = true;
-                        info.textContent = "Maaf, kamu kalah!";
-                    }
-                } else if (mode === "medium") {
-                    if (number >= 20) {
-                        add.disabled = true;
-                        info.textContent = "Selamat, kamu menang!";
-                    } else {
-                        add.disabled = true;
-                        info.textContent = "Maaf, kamu kalah!";
-                    }
-                } else if (mode === "hard") {
-                    if (number >= 50) {
-                        add.disabled = true;
-                        info.textContent = "Selamat, kamu menang!";
-                    } else {
-                        add.disabled = true;
-                        info.textContent = "Maaf, kamu kalah!";
-                    }
-                }
-                start.style.display = "block";
-                playAgain.style.display = "none";
-            }
-            function cekDetik(mode) {
-                if (mode === "easy") {
-                    detik = 15000;
+                    container.style.display = "block"
+                    containerMode.style.display = "none"
+                })
+        })
+        function cekMode(mode) {
+            if (mode === 'easy') {
+                if (number >= 20) {
+                    info.textContent = 'Selamat, kamu menang!'
+                    add.disabled = true
+                    updateBestScore("easy")
                 } else {
-                    detik = 10000;
+                    add.disabled = true
+                    info.textContent = 'Maaf, kamu kalah!'
+                }
+            } else if (mode === 'medium') {
+                if (number >= 20) {
+                    add.disabled = true
+                    info.textContent = 'Selamat, kamu menang!'
+                    updateBestScore("medium")
+                } else {
+                    add.disabled = true
+                    info.textContent = 'Maaf, kamu kalah!'
+                }
+            } else if (mode === 'hard') {
+                if (number >= 50) {
+                    add.disabled = true
+                    info.textContent = 'Selamat, kamu menang!'
+                    updateBestScore("hard")
+                } else {
+                    add.disabled = true
+                    info.textContent = 'Maaf, kamu kalah!'
                 }
             }
-            function updateBestScore(mode) {
-                if (number > bestScore[mode]) {
-                    bestScore[mode] = number;
-                    let li = document.getElementById(`score-${mode}`);
-                    if (!li) {
-                        li = document.createElement("li");
-                        li.id = `score-${mode}`;
-                        li.textContent = `${bestScore[mode]} click (${mode})`;
-                        riwayatBestScore.appendChild(li);
-                    }
-                    li.textContent = `${bestScore[mode]} click (${mode})`;
-                }
+            start.style.display = "block"
+            playAgain.style.display = "none"
+        }
+        function cekDetik(mode) {
+            if (mode === 'easy') {
+                detik = 15000
+            } else {
+                detik = 10000
             }
-        </script>
-    </body>
+        }
+        function updateBestScore(mode) {
+            if (number > bestScore[mode]) {
+                bestScore[mode] = number
+                let li = document.getElementById(`score-${mode}`)
+                if(!li) {
+                    li = document.createElement("li")
+                    li.id = `score-${mode}`
+                    li.textContent = `${bestScore[mode]} click (${mode})`
+                    riwayatBestScore.appendChild(li)
+                }
+                li.textContent = `${bestScore[mode]} click (${mode})`
+            }
+        }
+
+    </script>
+</body>
 </html>
