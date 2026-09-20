@@ -154,6 +154,19 @@
                 detik = 10000
             }
         }
+              function updateBestScore(mode) {
+            if (number > bestScore[mode]) {
+                bestScore[mode] = number
+                let li = document.getElementById(`score-${mode}`)
+                if(!li) {
+                    li = document.createElement("li")
+                    li.id = `score-${mode}`
+                    li.textContent = `${bestScore[mode]} click (${mode})`
+                    riwayatBestScore.appendChild(li)
+                }
+                li.textContent = `${bestScore[mode]} click (${mode})`
+            }
+              }
         </script>
     </body>
 </html>
