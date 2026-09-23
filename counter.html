@@ -44,6 +44,7 @@
         <ul id="riwayatBestScore">
 
         </ul>
+
     </div>
     <script>
         let counter = document.getElementById('counter')
@@ -60,13 +61,13 @@
         let modeChange = null
         let detik = null
         let waktu = 0
+        let randomAngka = null
         let bestScore = {
             easy: 0,
             medium: 0,
             hard: 0
         }
         add.disabled = true
-
         add.addEventListener('click', () => {
             number++
             counter.textContent = number
@@ -107,7 +108,8 @@
                     let mode = button.getAttribute('mode')
                     switch (mode) {
                         case 'easy':
-                            info.textContent = 'Mode Easy: Kamu harus menekan tombol + sebanyak 20 kali dalam 15 detik!'
+                            randomTarget("easy")
+                            info.textContent = `Mode Easy: Kamu harus menekan tombol + sebanyak ${randomAngka} kali dalam 15 detik!`
                             timer.textContent = `Waktu: 15 detik`
                             modeChange = "easy"
                             waktu = 15
@@ -115,7 +117,8 @@
                             playAgain.style.display = "none"
                             break;
                         case 'medium':
-                            info.textContent = 'Mode Medium: Kamu harus menekan tombol + sebanyak 30 kali dalam 10 detik!'
+                            randomTarget("medium")
+                            info.textContent = `Mode Medium: Kamu harus menekan tombol + sebanyak ${randomAngka} kali dalam 10 detik!`
                             timer.textContent = `Waktu: 10 detik`
                             modeChange = "medium"
                             waktu = 10
@@ -123,7 +126,8 @@
                             playAgain.style.display = "none"
                             break;
                         case 'hard':
-                            info.textContent = 'Mode Hard: Kamu harus menekan tombol + sebanyak 50 kali dalam 10 detik!'
+                            randomTarget("hard")
+                            info.textContent = `Mode Hard: Kamu harus menekan tombol + sebanyak ${randomAngka} kali dalam 10 detik!`
                             timer.textContent = `Waktu: 10 detik`
                             modeChange = "hard"
                             waktu = 10
@@ -137,8 +141,8 @@
         })
         function cekMode(mode) {
             if (mode === 'easy') {
-                if (number >= 20) {
-                    info.textContent = 'Selamat, kamu menang!'
+                if (number >= randomAngka) {
+                    targetInfo.textContent = 'kamu berhasil mencapai target!'
                     add.disabled = true
                     updateBestScore("easy")
                 } else {
@@ -146,16 +150,15 @@
                     info.textContent = 'Maaf, kamu kalah!'
                 }
             } else if (mode === 'medium') {
-                if (number >= 20) {
+                if (number >= randomAngka) {
                     add.disabled = true
-                    info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("medium")
                 } else {
                     add.disabled = true
                     info.textContent = 'Maaf, kamu kalah!'
                 }
             } else if (mode === 'hard') {
-                if (number >= 50) {
+                if (number >= randomAngka) {
                     add.disabled = true
                     info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("hard")
@@ -187,7 +190,15 @@
                 li.textContent = `${bestScore[mode]} click (${mode})`
             }
         }
-
+        function randomTarget(mode) {
+            if (mode === 'easy') {
+                randomAngka = Math.floor(Math.random() * 20) + 1
+            } else if (mode === 'medium') {
+                randomAngka = Math.floor(Math.random() * 30) + 1
+            } else if (mode === 'hard') {
+                randomAngka = Math.floor(Math.random() * 50) + 1
+            }
+        }
     </script>
 </body>
 </html>
