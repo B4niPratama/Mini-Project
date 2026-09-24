@@ -142,8 +142,8 @@
         function cekMode(mode) {
             if (mode === 'easy') {
                 if (number >= randomAngka) {
-                    targetInfo.textContent = 'kamu berhasil mencapai target!'
                     add.disabled = true
+                    info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("easy")
                 } else {
                     add.disabled = true
@@ -152,6 +152,7 @@
             } else if (mode === 'medium') {
                 if (number >= randomAngka) {
                     add.disabled = true
+                    info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("medium")
                 } else {
                     add.disabled = true
@@ -192,11 +193,11 @@
         }
         function randomTarget(mode) {
             if (mode === 'easy') {
-                randomAngka = Math.floor(Math.random() * 20) + 1
+                randomAngka = Math.floor(Math.random() * 11) + 15
             } else if (mode === 'medium') {
-                randomAngka = Math.floor(Math.random() * 30) + 1
+                randomAngka = Math.floor(Math.random() * 21) + 20
             } else if (mode === 'hard') {
-                randomAngka = Math.floor(Math.random() * 50) + 1
+                randomAngka = Math.floor(Math.random() * 21) + 30
             }
         }
     </script>
