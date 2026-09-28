@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,17 +9,21 @@
         .container-mode {
             display: block;
         }
+
         .container {
             display: none;
         }
+
         #start {
             display: none;
         }
+
         #playAgain {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <div class="container-mode">
         <h1>Pilih mode: </h1>
@@ -62,6 +67,8 @@
         let detik = null
         let waktu = 0
         let randomAngka = null
+        let hitungMundur = null
+        let batasWaktu = null
         let bestScore = {
             easy: 0,
             medium: 0,
@@ -71,6 +78,13 @@
         add.addEventListener('click', () => {
             number++
             counter.textContent = number
+            if (number === randomAngka) {
+                clearInterval(hitungMundur)
+                clearTimeout(batasWaktu)
+                add.disabled = true
+                info.textContent = 'Selamat, kamu menang!'
+                cekMode(modeChange)
+            }
         })
         playAgain.addEventListener("click", () => {
             start.disabled = false
@@ -86,21 +100,21 @@
             add.disabled = false
             start.disabled = true
             cekDetik(modeChange)
-            let hitungMundur = setInterval(() => {
+            hitungMundur = setInterval(() => {
                 waktu--
                 timer.textContent = `Waktu: ${waktu} detik`
                 if (waktu === 0) {
+                    add.disabled = true
                     timer.textContent = "Selesai!"
                     clearInterval(hitungMundur)
                 }
             },
                 1000)
-            setTimeout(() => {
+            batasWaktu = setTimeout(() => {
                 cekMode(modeChange)
-                start.style.display = "none"
-                playAgain.style.display = "block"
             },
                 detik)
+           
         })
         modeButtons.forEach(button => {
             button.addEventListener('click',
@@ -168,8 +182,8 @@
                     info.textContent = 'Maaf, kamu kalah!'
                 }
             }
-            start.style.display = "block"
-            playAgain.style.display = "none"
+            start.style.display = "none"
+            playAgain.style.display = "block"
         }
         function cekDetik(mode) {
             if (mode === 'easy') {
@@ -182,7 +196,7 @@
             if (number > bestScore[mode]) {
                 bestScore[mode] = number
                 let li = document.getElementById(`score-${mode}`)
-                if(!li) {
+                if (!li) {
                     li = document.createElement("li")
                     li.id = `score-${mode}`
                     li.textContent = `${bestScore[mode]} click (${mode})`
@@ -202,4 +216,5 @@
         }
     </script>
 </body>
+
 </html>
