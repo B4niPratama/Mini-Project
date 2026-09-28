@@ -69,7 +69,7 @@
         let randomAngka = null
         let hitungMundur = null
         let batasWaktu = null
-        let bestScore = {
+        let bestScore = JSON.parse(localStorage.getItem("bestScore")) || {
             easy: 0,
             medium: 0,
             hard: 0
@@ -114,7 +114,7 @@
                 cekMode(modeChange)
             },
                 detik)
-           
+
         })
         modeButtons.forEach(button => {
             button.addEventListener('click',
@@ -195,6 +195,7 @@
         function updateBestScore(mode) {
             if (number > bestScore[mode]) {
                 bestScore[mode] = number
+                localStorage.setItem("bestScore", JSON.stringify(bestScore))
                 let li = document.getElementById(`score-${mode}`)
                 if (!li) {
                     li = document.createElement("li")
@@ -202,8 +203,16 @@
                     li.textContent = `${bestScore[mode]} click (${mode})`
                     riwayatBestScore.appendChild(li)
                 }
-                li.textContent = `${bestScore[mode]} click (${mode})`
             }
+            let li = document.getElementById(`score-${mode}`)
+            if (!li) {
+                li = document.createElement("li")
+                li.id = `score-${mode}`
+                li.textContent = `${bestScore[mode]} click (${mode})`
+                riwayatBestScore.appendChild(li)
+            }
+            li.textContent = `${bestScore[mode]} click (${mode})`
+        }
         }
         function randomTarget(mode) {
             if (mode === 'easy') {
