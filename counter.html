@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +8,17 @@
         .container-mode {
             display: block;
         }
-
         .container {
             display: none;
         }
-
         #start {
             display: none;
         }
-
         #playAgain {
             display: none;
         }
     </style>
 </head>
-
 <body>
     <div class="container-mode">
         <h1>Pilih mode: </h1>
@@ -67,9 +62,7 @@
         let detik = null
         let waktu = 0
         let randomAngka = null
-        let hitungMundur = null
-        let batasWaktu = null
-        let bestScore = JSON.parse(localStorage.getItem("bestScore")) || {
+        let bestScore = {
             easy: 0,
             medium: 0,
             hard: 0
@@ -78,13 +71,6 @@
         add.addEventListener('click', () => {
             number++
             counter.textContent = number
-            if (number === randomAngka) {
-                clearInterval(hitungMundur)
-                clearTimeout(batasWaktu)
-                add.disabled = true
-                info.textContent = 'Selamat, kamu menang!'
-                cekMode(modeChange)
-            }
         })
         playAgain.addEventListener("click", () => {
             start.disabled = false
@@ -100,21 +86,21 @@
             add.disabled = false
             start.disabled = true
             cekDetik(modeChange)
-            hitungMundur = setInterval(() => {
+            let hitungMundur = setInterval(() => {
                 waktu--
                 timer.textContent = `Waktu: ${waktu} detik`
                 if (waktu === 0) {
-                    add.disabled = true
                     timer.textContent = "Selesai!"
                     clearInterval(hitungMundur)
                 }
             },
                 1000)
-            batasWaktu = setTimeout(() => {
+            setTimeout(() => {
                 cekMode(modeChange)
+                start.style.display = "none"
+                playAgain.style.display = "block"
             },
                 detik)
-
         })
         modeButtons.forEach(button => {
             button.addEventListener('click',
@@ -156,8 +142,8 @@
         function cekMode(mode) {
             if (mode === 'easy') {
                 if (number >= randomAngka) {
+                    targetInfo.textContent = 'kamu berhasil mencapai target!'
                     add.disabled = true
-                    info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("easy")
                 } else {
                     add.disabled = true
@@ -166,7 +152,6 @@
             } else if (mode === 'medium') {
                 if (number >= randomAngka) {
                     add.disabled = true
-                    info.textContent = 'Selamat, kamu menang!'
                     updateBestScore("medium")
                 } else {
                     add.disabled = true
@@ -182,8 +167,8 @@
                     info.textContent = 'Maaf, kamu kalah!'
                 }
             }
-            start.style.display = "none"
-            playAgain.style.display = "block"
+            start.style.display = "block"
+            playAgain.style.display = "none"
         }
         function cekDetik(mode) {
             if (mode === 'easy') {
@@ -195,35 +180,25 @@
         function updateBestScore(mode) {
             if (number > bestScore[mode]) {
                 bestScore[mode] = number
-                localStorage.setItem("bestScore", JSON.stringify(bestScore))
                 let li = document.getElementById(`score-${mode}`)
-                if (!li) {
+                if(!li) {
                     li = document.createElement("li")
                     li.id = `score-${mode}`
                     li.textContent = `${bestScore[mode]} click (${mode})`
                     riwayatBestScore.appendChild(li)
                 }
-            }
-            let li = document.getElementById(`score-${mode}`)
-            if (!li) {
-                li = document.createElement("li")
-                li.id = `score-${mode}`
                 li.textContent = `${bestScore[mode]} click (${mode})`
-                riwayatBestScore.appendChild(li)
             }
-            li.textContent = `${bestScore[mode]} click (${mode})`
-        }
         }
         function randomTarget(mode) {
             if (mode === 'easy') {
-                randomAngka = Math.floor(Math.random() * 11) + 15
+                randomAngka = Math.floor(Math.random() * 20) + 1
             } else if (mode === 'medium') {
-                randomAngka = Math.floor(Math.random() * 21) + 20
+                randomAngka = Math.floor(Math.random() * 30) + 1
             } else if (mode === 'hard') {
-                randomAngka = Math.floor(Math.random() * 21) + 30
+                randomAngka = Math.floor(Math.random() * 50) + 1
             }
         }
     </script>
 </body>
-
 </html>
