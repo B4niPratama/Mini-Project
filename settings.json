@@ -1,0 +1,10 @@
+{
+    "workbench.colorTheme": "Dracula Theme",
+    "editor.wordWrap": "on",
+    "editor.mouseWheelZoom": true,
+    "editor.fontFamily": "jetBrains mono",
+    "editor.fontWeight": "800",
+    "files.autoSave": "afterDelay",
+    "editor.stickyScroll.enabled": false,
+    "editor.minimap.enabled": false
+}
