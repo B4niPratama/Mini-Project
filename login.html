@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container-register {
+            display: none
+        }
+        .container-login {
+            display: block
+        }
+    </style>
+</head>
+<body>
+    <div class="container-login">
+        <h1>login</h1>
+        <input type="text" id="username" placeholder="username">
+        <input type="password" id="password" placeholder="password">
+        <p id="login-status"></p>
+        <button id="show-register-form">Belum Punya Akun?</button>
+        <button id="login-btn">login</button>
+    </div>
+    <div class="container-register">
+        <h1>Register</h1>
+        <input type="text" id="new-username" placeholder="username">
+        <input type="password" id="new-password" placeholder="password">
+        <input type="password" id="confirm-password" placeholder="password">
+        <p id="register-status"></p>
+        <button id="show-login-form">Sudah punya akun?</button>
+        <button id="register-btn">Register</button>
+    </div>
+    <script>
+        // REGISTER
+        const newUsername = document.getElementById("new-username")
+        const newPassword = document.getElementById("new-password")
+        const confirmPassword = document.getElementById("confirm-password")
+        const registerStatus = document.getElementById("register-status")
+        const showLoginForm = document.getElementById("show-login-form")
+        const registerBtn = document.getElementById("register-btn")
+        const containerRegister = document.querySelector(".container-register")
+
+        // LOGIN 
+        let username = document.getElementById("username")
+        let password = document.getElementById("password")
+        let loginStatus = document.getElementById("login-status")
+        const showRegisterForm = document.getElementById("show-register-form")
+        const loginBtn = document.getElementById("login-btn")
+        const containerLogin = document.querySelector(".container-login")
+
+        let account = {
+            user: newUsername.value,
+            pass: newPassword.value
+        } || JSON.parse(localStorage.getItem("account"))
+
+         async function delay(milidetik) {
+            return new Promise (resolve => setTimeout(resolve, milidetik))
+         }
+        loginBtn.addEventListener("click", () => {
+            if (username.value === "" || password.value === "") {
+                loginStatus.textContent = "username atau password kosong!"
+                return
+            }
+            if (username.value === account.username && password.value === account.password) {
+                loginStatus.textContent = "Login berhasil"
+                delay(1000)
+                loginStatus.textContent = `halo,${account.username}`
+                return
+            } else {
+                loginStatus.textContent = "username atau password salah!"
+                return
+            }
+        })
+        showRegisterForm.addEventListener('click', () => {
+            containerRegister.style.display = "block"
+            containerLogin.style.display = "none"
+        })
+        showLoginForm.addEventListener('click', () => {
+            containerRegister.style.display = "none"
+            containerLogin.style.display = "block"
+        })
+        registerBtn.addEventListener('click',() => {
+            if (newUsername.value === "" || 
+                newPassword.value === "" ||
+                confirmPassword.value === ""
+            ) {
+                registerStatus.textContent = "username atau password kosong!"
+                return
+            } else if (newPassword.value !== confirmPassword.value) {
+                registerStatus.textContent = "konfirmasi password tidak sesuai!"
+                return 
+            }
+            account = {
+                username: newUsername.value,
+                password: newPassword.value
+            }
+            localStorage.setItem("account", JSON.stringify(account))
+            registerStatus.textContent = "Akun berhasil dibuat!"
+        })
+    </script>
+</body>
+</html>
