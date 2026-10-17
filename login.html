@@ -1,103 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .container-register {
-            display: none
-        }
-        .container-login {
-            display: block
-        }
-    </style>
-</head>
-<body>
-    <div class="container-login">
-        <h1>login</h1>
-        <input type="text" id="username" placeholder="username">
-        <input type="password" id="password" placeholder="password">
-        <p id="login-status"></p>
-        <button id="show-register-form">Belum Punya Akun?</button>
-        <button id="login-btn">login</button>
-    </div>
-    <div class="container-register">
-        <h1>Register</h1>
-        <input type="text" id="new-username" placeholder="username">
-        <input type="password" id="new-password" placeholder="password">
-        <input type="password" id="confirm-password" placeholder="password">
-        <p id="register-status"></p>
-        <button id="show-login-form">Sudah punya akun?</button>
-        <button id="register-btn">Register</button>
-    </div>
-    <script>
-        // REGISTER
-        const newUsername = document.getElementById("new-username")
-        const newPassword = document.getElementById("new-password")
-        const confirmPassword = document.getElementById("confirm-password")
-        const registerStatus = document.getElementById("register-status")
-        const showLoginForm = document.getElementById("show-login-form")
-        const registerBtn = document.getElementById("register-btn")
-        const containerRegister = document.querySelector(".container-register")
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Login V2 - Project 03</title>
+        <style>
+            .container-register {
+                display: none;
+            }
+            .container {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-register">
+            <h1>Register</h1>
+            <input type="text" id="new-username" placeholder="username baru" />
+            <input
+                type="password"
+                id="new-password"
+                placeholder="password baru"
+            />
+            <input
+                type="password"
+                id="confirm-password"
+                placeholder="konfirmasi password"
+            />
+            <p id="status-register"></p>
+            <button id="show-login-form">Login</button>
+            <button id="register-btn">Register</button>
+        </div>
+        <div class="container-login">
+            <h1>Login</h1>
+            <input type="text" id="username" placeholder="username" />
+            <input type="password" id="password" placeholder="password" />
+            <button id="show-register-form">buat akun baru</button>
+            <button id="btn">Login</button>
+            <p>Status :</p>
+            <p id="status">Belum login</p>
+        </div>
 
-        // LOGIN 
-        let username = document.getElementById("username")
-        let password = document.getElementById("password")
-        let loginStatus = document.getElementById("login-status")
-        const showRegisterForm = document.getElementById("show-register-form")
-        const loginBtn = document.getElementById("login-btn")
-        const containerLogin = document.querySelector(".container-login")
+        <script>
+            const newPassword = document.getElementById("new-password");
+            const newUsername = document.getElementById("new-username");
+            const confirmPassword = document.getElementById("confirm-password");
+            const statusRegister = document.getElementById("status-register");
+            const registerBtn = document.getElementById("register-btn");
+            const showLoginForm = document.getElementById("show-login-form");
+            const containerRegister = document.querySelector(
+                ".container-register"
+            );
 
-        let account = {
-            user: newUsername.value,
-            pass: newPassword.value
-        } || JSON.parse(localStorage.getItem("account"))
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+            const btn = document.getElementById("btn");
+            const status = document.getElementById("status");
+            const containerLogin = document.querySelector(".container-login");
+            const showRegisterForm =
+                document.getElementById("show-register-form");
 
-         async function delay(milidetik) {
-            return new Promise (resolve => setTimeout(resolve, milidetik))
-         }
-        loginBtn.addEventListener("click", () => {
-            if (username.value === "" || password.value === "") {
-                loginStatus.textContent = "username atau password kosong!"
-                return
+            let account =
+                {
+                    username: newUsername.value,
+                    password: newPassword
+                } || JSON.parse(localStorage.getItem("account"));
+            function delay(milidetik) {
+                return new Promise(resolve => {
+                    setTimeout(resolve, milidetik);
+                });
             }
-            if (username.value === account.username && password.value === account.password) {
-                loginStatus.textContent = "Login berhasil"
-                delay(1000)
-                loginStatus.textContent = `halo,${account.username}`
-                return
-            } else {
-                loginStatus.textContent = "username atau password salah!"
-                return
+            async function proses() {
+                try {
+                    const user = await login(
+                        account.username,
+                        account.password
+                    );
+                    status.textContent = "Login berhasil...";
+                    await delay(1000);
+                    status.textContent = `Selamat datang,${user}`;
+                } catch (error) {
+                    status.textContent = error;
+                }
             }
-        })
-        showRegisterForm.addEventListener('click', () => {
-            containerRegister.style.display = "block"
-            containerLogin.style.display = "none"
-        })
-        showLoginForm.addEventListener('click', () => {
-            containerRegister.style.display = "none"
-            containerLogin.style.display = "block"
-        })
-        registerBtn.addEventListener('click',() => {
-            if (newUsername.value === "" || 
-                newPassword.value === "" ||
-                confirmPassword.value === ""
-            ) {
-                registerStatus.textContent = "username atau password kosong!"
-                return
-            } else if (newPassword.value !== confirmPassword.value) {
-                registerStatus.textContent = "konfirmasi password tidak sesuai!"
-                return 
+            function login(user, pass) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (
+                            user === username.value &&
+                            pass === password.value
+                        ) {
+                            resolve(user);
+                        } else if (
+                            user !== username.value &&
+                            pass !== password.value
+                        ) {
+                            reject("akun tidak ditemukan!");
+                        } else {
+                            reject("username atau password salah!");
+                        }
+                    }, 2000);
+                });
             }
-            account = {
-                username: newUsername.value,
-                password: newPassword.value
-            }
-            localStorage.setItem("account", JSON.stringify(account))
-            registerStatus.textContent = "Akun berhasil dibuat!"
-        })
-    </script>
-</body>
+            btn.addEventListener("click", () => {
+                if (username.value === "" || password.value === "") {
+                    status.textContent = "Masukkan Username dan Password!";
+                    username.value = "";
+                    password.value = "";
+                } else {
+                    status.textContent = "Sedang menghubungkan ke server...";
+                    proses();
+                }
+            });
+            showRegisterForm.addEventListener("click", () => {
+                containerRegister.style.display = "block";
+                containerLogin.style.display = "none";
+            });
+            registerBtn.addEventListener("click", () => {
+                if (
+                    newUsername.value === "" ||
+                    newPassword.value === "" ||
+                    confirmPassword.value === ""
+                ) {
+                    statusRegister.textContent =
+                        "Masukkan Username dan Password!";
+                    newUsername.value = "";
+                    newPassword.value = "";
+                    confirmPassword.value = "";
+                    return;
+                } else if (newPassword.value !== confirmPassword.value) {
+                    statusRegister.textContent =
+                        "konfirmasi password tidak valid!";
+                    return;
+                }
+                account = {
+                    username: newUsername.value,
+                    password: newPassword.value
+                };
+                localStorage.setItem("account", JSON.stringify(account));
+                statusRegister.textContent = "akun berhasil dibuat!";
+            });
+            showLoginForm.addEventListener("click", () => {
+                containerRegister.style.display = "none";
+                containerLogin.style.display = "block";
+            });
+        </script>
+    </body>
 </html>
