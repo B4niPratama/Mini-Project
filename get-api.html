@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOGIN (API)</title>
+</head>
+<body>
+  <h1>LOGIN (API)</h1>
+  <input type="text" id="username" placeholder="username">
+  <input type="email" id="email" placeholder="email">
+  <p id="status"></p>
+  <button id="get-API-btn">Login</button>
+  <script>
+    let username = document.getElementById("username")
+    let email = document.getElementById("email")
+    let status = document.getElementById("status")
+    const getAPIBtn = document.getElementById("get-API-btn")
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve,ms))
+    }
+    async function getAPI() {
+      const respon = await fetch("https://jsonplaceholder.typicode.com/users")
+      if(!respon.ok) {
+        throw new Error("Error")
+      }
+      const takeData = await respon.json()
+      return takeData
+    }
+    async function proses() {
+      let number = 0
+      if (username.value === "" || email.value === "") {
+        status.textContent = "Username atau email kosong!"
+        username.value = ""
+        email.value = ""
+        return
+      }
+      status.textContent = "Menghubungkan ke server..."
+      try {
+        username.disabled = true
+        email.disabled = true
+        getAPIBtn.disabled = true
+        const dataUser = await getAPI()
+        await delay(1000)
+        do {
+          if (username.value === dataUser[number].username && email.value === dataUser[number].email) {
+            break
+          }
+          if (number === 9) {
+            status.textContent = "username atau email salah!"
+            getAPIBtn.disabled = false
+            username.value = ""
+            email.value = ""
+            return
+            break
+          }
+          number++
+        } while (username.value !== dataUser[number].username || email.value !== dataUser[number].email)
+            status.textContent = "login berhasil..."
+            await delay(1000)
+            status.textContent = `selamat datang ${dataUser[number].username}!`
+            username.value = ""
+            email.value = ""
+      } catch (error) {
+        status.textContent = error.message
+        return
+      } finally {
+        getAPIBtn.disabled = false
+        username.disabled = false
+        email.disabled = false
+        number = 0
+      }
+    }
+    getAPIBtn.addEventListener("click", () => {
+      proses()
+    })
+  </script>
+</body>
+</html>
