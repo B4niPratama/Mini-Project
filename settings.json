@@ -6,5 +6,8 @@
     "editor.fontWeight": "800",
     "files.autoSave": "afterDelay",
     "editor.stickyScroll.enabled": false,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorStyle": "underline",
+    "editor.cursorSmoothCaretAnimation": "on"
 }
