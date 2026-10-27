@@ -22,7 +22,7 @@
     async function getAPI() {
       const respon = await fetch("https://jsonplaceholder.typicode.com/users")
       if(!respon.ok) {
-        throw new Error("Error")
+        throw new Error(`Http error : ${respon.status}`)
       }
       const takeData = await respon.json()
       return takeData
